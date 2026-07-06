@@ -116,10 +116,13 @@ function setupForm() {
       return;
     }
 
-    const accessKey = form.querySelector('[name="access_key"]').value;
+    const accessKey = form.querySelector('[name="access_key"]').value.trim();
+    // Só consideramos a chave válida se tiver o formato UUID do Web3Forms.
+    // Enquanto o placeholder não for substituído, o envio cai no WhatsApp.
+    const keyConfigured = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(accessKey);
 
     // Sem chave configurada → fallback para WhatsApp
-    if (!accessKey || accessKey.includes("2c8219f9-ad47-4562-8356-54387d0f83df")) {
+    if (!keyConfigured) {
       const data = new FormData(form);
       const msg =
         `Olá, Dra. Paula. Vim pelo site.%0A%0A` +
